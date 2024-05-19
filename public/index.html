@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="UTF-8">
+  <title>Express</title>
+  <link rel="stylesheet" href="/stylesheets/style.css">
+</head>
+<body>
+<form id="bubble_tea_price" action="/api/submit" method="get">
+  <label for="store">飲料店名:</label>
+  <select id="store" name="store" required>
+    <option value="五十嵐">五十嵐</option>
+    <option value="麻古">麻古</option>
+    <option value="春水堂">春水堂</option>
+    <option value="迷客夏">迷客夏</option>
+    <option value="清心福全">清心福全</option>
+  </select><br><br>
+
+  <label for="year">年份:</label>
+  <select id="year" name="year" required>
+    <option value="2010">2010</option>
+    <option value="2011">2011</option>
+    <option value="2012">2012</option>
+    <option value="2013">2013</option>
+    <option value="2014">2014</option>
+    <option value="2015">2015</option>
+    <option value="2016">2016</option>
+    <option value="2017">2017</option>
+    <option value="2018">2018</option>
+    <option value="2019">2019</option>
+    <option value="2020">2020</option>
+    <option value="2021">2021</option>
+    <option value="2022">2022</option>
+    <option value="2023">2023</option>
+  </select><br><br>
+
+  <input type="submit" value="提交">
+</form>
+
+<div id="log"></div>
+
+<script>
+  document.getElementById('bubble_tea_price').addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const store = document.getElementById('store').value;
+    const year = document.getElementById('year').value;
+    const res = await fetch(`/api/submit?store=${store}&year=${year}`, {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json'
+      }
+    });
+    const data = await res.json();
+    displayResults(data);
+  });
+
+  function displayResults(data) {
+    let table = '<table border="1"><tr><th>飲料店名</th><th>年份</th><th>珍奶價格</th></tr>';
+    data.forEach(item => {
+      table += `<tr><td>${item.store}</td><td>${item.year}</td><td>${item.price}</td></tr>`;
+    });
+    table += '</table>';
+    document.getElementById('log').innerHTML = table;
+  }
+</script>
+</body>
+</html>
